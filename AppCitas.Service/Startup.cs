@@ -1,12 +1,15 @@
+using AppCitas.Service.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace AppCitas;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration)
+    private readonly IConfiguration _config;
+    public Startup(IConfiguration config)
     {
-        Configuration = configuration;
+        _config = config;
     }
 
     public IConfiguration Configuration { get; }
@@ -14,7 +17,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-
+        services.AddDbContext<DataContext>(options =>
+        {
+            options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+        });
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
