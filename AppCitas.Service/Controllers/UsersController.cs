@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
         return await _context.Users.ToListAsync();
     }
 
-    // GET aí/usaers/{id}
+    // GET api/usaers/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<AppUser>> GetUserById(int id)
     {
