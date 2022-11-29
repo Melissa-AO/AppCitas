@@ -7,9 +7,7 @@ using SQLitePCL;
 
 namespace AppCitas.Service.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class UsersController : ControllerBase
+public class UsersController : BaseApiController
 {
     private readonly DataContext _context;
 
