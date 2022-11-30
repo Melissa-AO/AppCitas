@@ -1,6 +1,11 @@
+using System.Text;
 using AppCitas.Service.Data;
+using AppCitas.Service.Extensions;
 using AppCitas.Service.Interfaces;
+using AppCitas.Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace AppCitas;
@@ -8,6 +13,7 @@ namespace AppCitas;
 public class Startup
 {
     private readonly IConfiguration _config;
+
     public Startup(IConfiguration config)
     {
         _config = config;
@@ -18,13 +24,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<ITokenService, ITokenService>();
-        services.AddDbContext<DataContext>(options =>
-        {
-            options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-        });
+        services.AddApplicationServices(_config);
         services.AddControllers();
         services.AddCors();
+        services.AddIdentityServices(_config);
 
         services.AddSwaggerGen(c =>
         {
@@ -47,6 +50,8 @@ public class Startup
         app.UseRouting();
 
         app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 
