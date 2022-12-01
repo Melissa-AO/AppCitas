@@ -1,16 +1,13 @@
 ﻿using AppCitas.Service.DTOs;
 using AppCitas.UnitTests.Helpers;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace AppCitas.UnitTests.Tests
 {
@@ -27,8 +24,8 @@ namespace AppCitas.UnitTests.Tests
             _client = TestHelper.Instance.Client;
         }
         [Theory]
-        [InlineData("BadRequest", "lisa", "Pa$$w0rd", "lisa", "Perros")]
-        public async Task CreateMessage_BadRequest(string statusCode, string username, string password, string recipientUsername, string content)
+        [InlineData("BadRequest", "louise", "Pa$$w0rd", "louise", "Buenos días")]
+        public async Task CreateMessage_ShouldBadRequest(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -51,8 +48,8 @@ namespace AppCitas.UnitTests.Tests
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
         [Theory]
-        [InlineData("NotFound", "lisa", "Pa$$w0rd", "masterlol16", "Gatos")]
-        public async Task CreateMessage_NotFound(string statusCode, string username, string password, string recipientUsername, string content)
+        [InlineData("NotFound", "lisa", "Pa$$w0rd", "kakaroto", "Hola")]
+        public async Task CreateMessage_ShouldNotFound(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -75,8 +72,8 @@ namespace AppCitas.UnitTests.Tests
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
         [Theory]
-        [InlineData("OK", "wagner", "Pa$$w0rd", "lisa", "Conejos")]
-        public async Task CreateMessage_OK(string statusCode, string username, string password, string recipientUsername, string content)
+        [InlineData("OK", "hewitt", "Pa$$w0rd", "lisa", "Hola")]
+        public async Task CreateMessage_ShouldOK(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -100,8 +97,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("OK", "todd", "Pa$$w0rd")]
-        public async Task GetMessagesForUser_OK(string statusCode, string username, string password)
+        [InlineData("OK", "todd", "Pa$$w0rd", "lisa", "Buenas tardes")]
+        public async Task GetMessagesForUser_ShouldOK(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -118,8 +115,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("OK", "tanner", "Pa$$w0rd", "Outbox")]
-        public async Task GetMessagesForUserFromQuery_OK(string statusCode, string username, string password, string container)
+        [InlineData("OK", "todd", "Pa$$w0rd", "Outbox")]
+        public async Task GetMessagesForUserFromQuery_ShouldOK(string statusCode, string username, string password, string container)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -136,8 +133,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("OK", "esmeralda", "Pa$$w0rd", "todd")]
-        public async Task GetMessagesThread_OK(string statusCode, string username, string password, string user2)
+        [InlineData("OK", "todd", "Pa$$w0rd", "lisa")]
+        public async Task GetMessagesThread_ShouldOK(string statusCode, string username, string password, string user2)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -155,8 +152,8 @@ namespace AppCitas.UnitTests.Tests
 
 
         [Theory]
-        [InlineData("OK", "rosa", "Pa$$w0rd", "berry", "Hamsters")]
-        public async Task DeleteMessage_OK(string statusCode, string username, string password, string recipientUsername, string content)
+        [InlineData("OK", "wagner", "Pa$$w0rd", "lisa", "Buenas noches")]
+        public async Task DeleteMessage_ShouldOK(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -191,8 +188,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("Unauthorized", "hewitt", "Pa$$w0rd", "lisa", "Peces", "tanner")]
-        public async Task DeleteMessage_Unauthorized(string statusCode, string username, string password, string recipientUsername, string content, string unauth)
+        [InlineData("Unauthorized", "tanner", "Pa$$w0rd", "lisa", "Hola", "caroline")]
+        public async Task DeleteMessage_ShouldUnauthorized(string statusCode, string username, string password, string recipientUsername, string content, string unauth)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);

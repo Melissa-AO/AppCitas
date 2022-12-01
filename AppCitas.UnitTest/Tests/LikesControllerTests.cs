@@ -1,6 +1,7 @@
 ﻿using AppCitas.Service.DTOs;
 using AppCitas.UnitTests.Helpers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AppCitas.UnitTests.Tests 
+namespace AppCitas.UnitTests.Tests
 {
     public class LikesControllerTests
     {
@@ -28,15 +29,15 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("NotFound", "esmeralda", "Pa$$w0rd","pepintox27")]
-        public async Task AddLike_NotFound(string statusCode, string username, string password,string userLiked)
+        [InlineData("NotFound", "lisa", "Pa$$w0rd", "coco")]
+        public async Task AddLike_ShouldReturnNotFound(string statusCode, string username, string password, string userLiked)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
 
 
-            requestUri = $"{apiRoute}/"+userLiked;
+            requestUri = $"{apiRoute}/" + userLiked;
 
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
@@ -48,8 +49,8 @@ namespace AppCitas.UnitTests.Tests
 
 
         [Theory]
-        [InlineData("BadRequest", "todd", "Pa$$w0rd", "todd")]
-        public async Task AddLike_BadRequest(string statusCode, string username, string password, string userLiked)
+        [InlineData("BadRequest", "lisa", "Pa$$w0rd", "lisa")]
+        public async Task AddLike_ShouldBadRequest(string statusCode, string username, string password, string userLiked)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -67,8 +68,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("OK", "lisa", "Pa$$w0rd", "esmeralda")]
-        public async Task AddLike_OK(string statusCode, string username, string password, string userLiked)
+        [InlineData("OK", "rosa", "Pa$$w0rd", "lisa")]
+        public async Task AddLike_ShouldOK(string statusCode, string username, string password, string userLiked)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -80,15 +81,14 @@ namespace AppCitas.UnitTests.Tests
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
             _client.DefaultRequestHeaders.Authorization = null;
-
             // Assert
             Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
 
         [Theory]
-        [InlineData("BadRequest", "tanner", "Pa$$w0rd", "esmeralda")]
-        public async Task AddLikeBadRequest2(string statusCode, string username, string password, string userLiked)
+        [InlineData("BadRequest", "rosa", "Pa$$w0rd", "wagner")]
+        public async Task AddLike_ShouldBadRequest2(string statusCode, string username, string password, string userLiked)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -108,8 +108,8 @@ namespace AppCitas.UnitTests.Tests
         }
 
         [Theory]
-        [InlineData("OK", "berry", "Pa$$w0rd")]
-        public async Task GetUserLikes_OK(string statusCode, string username, string password)
+        [InlineData("OK", "todd", "Pa$$w0rd")]
+        public async Task GetUserLikes_ShouldOK(string statusCode, string username, string password)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -161,3 +161,4 @@ namespace AppCitas.UnitTests.Tests
         #endregion
     }
 }
+
